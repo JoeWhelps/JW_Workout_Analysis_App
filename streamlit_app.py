@@ -219,12 +219,10 @@ elif selection == "Log a Workout":
 else:
     [ st.table(reversed(pep)) for pep in data_t["workouts"] ]
     # st.table(data_t["workouts"][1])
-    select_d = st.selectbox("Choose a date",dates)
+    # select_d = st.selectbox("Choose a date",dates)
 
     # Reverse the table when button is clicked
     if st.button("whatttt?"):  # Display the reversed table
         st.text("bro you good?")
 
 
-
-st.image("workout_225.jpg",caption="First time benching 225")
