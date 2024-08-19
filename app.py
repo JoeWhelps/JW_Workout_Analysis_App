@@ -2,8 +2,8 @@ import random
 import streamlit as st
 from yt_extractor import get_info
 import database_service as dbs
-from py_workout_table import dates
-from py_workout_table import data_boi
+# from py_workout_table import dates
+# from py_workout_table import data_boi
 import pandas as pd
 import matplotlib.pyplot as plt
 
