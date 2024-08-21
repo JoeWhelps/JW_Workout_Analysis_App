@@ -27,7 +27,7 @@ def parse_reps(reps_str):
     # Removing brackets and splitting by comma
     reps_str = reps_str.replace('[', '').replace(']', '')
     reps_list = []
-    for rep in rep.split(","):
+    for rep in reps_str.split(","):
         print(rep)
         try:
             reps_list.append(int(rep))
