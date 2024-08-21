@@ -24,8 +24,7 @@ def get_duration_text(duration_s):
 
 def parse_reps(reps_str):
     """Parse the reps string into a list of integers."""
-    reps_str = reps_str.replace('[', '').replace(']', '')
-    return [int(rep) for rep in reps_str.split(',')]
+    return reps_str.split("[").split("]")
 
 def parse_weights(weights_str):
     """Parse the weights string into a list of integers."""
