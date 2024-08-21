@@ -22,6 +22,80 @@ def get_duration_text(duration_s):
         text += f'{minutes:02d}:{seconds:02d}'
     return text
 
+def parse_reps(reps_str):
+    """Parse the reps string into a list of integers."""
+    reps_str = reps_str.replace('[', '').replace(']', '')
+    return [int(rep) for rep in reps_str.split(',')]
+
+def parse_weights(weights_str):
+    """Parse the weights string into a list of integers."""
+    return [int(weight) for weight in weights_str.split(',') if weight]
+
+def analyze_workout(workouts, exercise_name):
+    """Extract and analyze workout data for the selected exercise."""
+    weight, reps, dates, table_w = [], [], [], []
+    
+    for workout_day in workouts:
+        for workout in workout_day:
+            if exercise_name.lower() in workout["Exercise Name"].lower():
+                table_w.append(workout)
+                weights = parse_weights(workout["Weight"])
+                reps_list = parse_reps(workout["Reps"])
+                
+                if len(weights) == len(reps_list):
+                    weight.extend(weights)
+                    reps.extend(reps_list)
+                    dates.extend([workout["Date"]] * len(weights))
+
+    return weight, reps, dates, table_w
+
+def display_analysis(weight, reps, dates, table_w):
+    """Display analysis results using Streamlit."""
+    st.markdown("## Analysis")
+    if not weight:
+        st.text("No data found for the selected exercise.")
+        return
+
+    st.text("Table of all entries with that exercise:")
+    st.table(table_w)
+    
+    # Data preparation for plotting
+    df = pd.DataFrame({
+        "Date": pd.to_datetime(dates, format='%m/%d/%y'),
+        "Weight": weight,
+        "Reps": reps
+    }).sort_values('Date')
+
+    # Plot weight over time
+    st.title('Weight Over Time')
+    plt.figure(figsize=(10, 5))
+    plt.plot(df['Date'], df['Weight'], marker='o')
+    plt.xlabel('Date')
+    plt.ylabel('Weight')
+    plt.title('Weight Tracking')
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    st.pyplot(plt)
+
+    # Bar chart for weights
+    st.bar_chart(df['Weight'])
+    
+    # Summary statistics
+    st.markdown("### Summary Statistics")
+    st.text(f"Max Weight: {df['Weight'].max()}")
+    st.text(f"Min Weight: {df['Weight'].min()}")
+    st.text(f"Average Weight: {df['Weight'].mean():.2f}")
+    
+    # Additional plot: Reps vs Weight
+    st.title('Reps vs Weight')
+    plt.figure(figsize=(10, 5))
+    plt.scatter(df['Reps'], df['Weight'], marker='o')
+    plt.xlabel('Reps')
+    plt.ylabel('Weight')
+    plt.title('Reps vs Weight')
+    plt.grid(True)
+    st.pyplot(plt)
+
 # Custom CSS
 st.markdown(
     """
@@ -64,7 +138,7 @@ st.subheader("By Joseph Whelpley")
 st.text("This app connects to a harperdb database that contains 3 years of my workouts logged on my notes app, and a library of workout/motivation videos. Explore around and feel free to add your own entries")
 
 # menu options and sidebar 
-opts = ("Workouts Home", "Analysis", "Log a Workout","Today's workout video", "All workout videos", "Add workout video")
+opts = ("Workouts Home", "Analysis", "Log a Workout","Today's workout video", "All workout videos", "Add workout video","About this app")
 selection = st.sidebar.selectbox("Menu", opts)
 
 data_t = dbs.fetch_workout_data() # get all the workout_table data
@@ -142,6 +216,13 @@ elif selection == "Today's workout video":
         st.video(url)
 
 elif selection == "Analysis":
+    st.markdown(f"## Analysis")
+    sel_work = st.text_input("choose a workout to analyze")
+    if st.button("Analyze"):
+        if sel_work:
+            weight, reps, dates, table_w = analyze_workout(data_t["workouts"], sel_work)
+            display_analysis(weight, reps, dates, table_w)
+    '''
     # must clean some data
     st.markdown(f"## Analysis")
     sel_work = st.text_input("choose a workout to analyze")
@@ -200,7 +281,7 @@ elif selection == "Analysis":
         
 
         
-
+        '''
 elif selection == "Log a Workout":
     st.markdown("Log a Workout")
     log1 = st.text_input('New workout (cleaned)')
@@ -215,6 +296,9 @@ elif selection == "Log a Workout":
             dbs.insert_workout_entry(log1)
             st.text("Added workout!")
             st.cache_data.clear()
+
+elif selection == "About this app":
+    st.text("this is an app")
 
 else:
     [ st.table(reversed(pep)) for pep in data_t["workouts"] ]
