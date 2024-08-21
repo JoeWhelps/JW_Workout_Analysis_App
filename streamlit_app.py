@@ -228,70 +228,11 @@ elif selection == "Today's workout video":
 elif selection == "Analysis":
     st.markdown(f"## Analysis")
     sel_work = st.text_input("choose a workout to analyze")
-    if st.button("Analyze"):
-        if sel_work:
+    if sel_work:
+        if st.button("Analyze"):
             weight, reps, dates, table_w = analyze_workout(data_t["workouts"], sel_work)
             display_analysis(weight, reps, dates, table_w)
-    '''
-    # must clean some data
-    st.markdown(f"## Analysis")
-    sel_work = st.text_input("choose a workout to analyze")
-    if st.button("Analysis"):
-        if sel_work:
-            weight = []
-            reps = []
-            date = []
-            table_w = []
-            for l_dates in reversed(data_t["workouts"]):
-                for i in l_dates:
-                    if sel_work.lower() in i["Exercise Name"].lower():
-                        table_w.append(i)
-                        temp = i["Weight"].split(",")
-                        weight.extend(temp)
-                        date_t = [i["Date"]]*len(temp)
-                        date.extend(date_t)
-                        reps.extend(i["Reps"])
-
-        weight = [ int(el) for el in weight ]
-        st.text(weight)
-        st.text(reps)
-        st.text(date)
-        st.text("Table of all entries with that word")
-        st.table(table_w)
-        # Graph each weight by date
-        data = {
-            "Date": date,
-            "Weight": weight
-        }
-        # Convert to DataFrame
-        df = pd.DataFrame(data)
-
-        # Convert 'Date' column to datetime
-        df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%y')
-
-        # Sort by date
-        df = df.sort_values('Date')
-
-        # Streamlit App
-        st.title('Weight Over Time')
-
-        # Plot
-        plt.figure(figsize=(10, 5))
-        plt.plot(df['Date'], df['Weight'], marker='o')
-        plt.xlabel('Date')
-        plt.ylabel('Weight')
-        plt.title('Weight Tracking')
-        plt.grid(True)
-        plt.xticks(rotation=45)
-
-        # Show plot in Streamlit
-        st.pyplot(plt)
-        # bar chart of weight by order
-        st.bar_chart(weight)
-        
-
-        
-        '''
+    
 elif selection == "Log a Workout":
     st.markdown("Log a Workout")
     log1 = st.text_input('New workout (cleaned)')
