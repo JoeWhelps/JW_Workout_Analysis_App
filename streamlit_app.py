@@ -26,7 +26,13 @@ def parse_reps(reps_str):
     """Parse the reps string into a list of integers."""
     # Removing brackets and splitting by comma
     reps_str = reps_str.replace('[', '').replace(']', '')
-    reps_list = [int(rep) for rep in reps_str.split(',') ]
+    reps_list = []
+    for rep in rep.split(","):
+        print(rep)
+        try:
+            reps_list.append(int(rep))
+        except:
+            continue
     print(reps_list)
     
     return reps_list
