@@ -2,7 +2,7 @@ import random
 import streamlit as st
 from yt_extractor import get_info
 import database_service as dbs
-from analysis.py import Analysis_class
+from analysis import Analysis_class
 
 @st.cache_data
 def get_workouts():
