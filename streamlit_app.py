@@ -2,10 +2,7 @@ import random
 import streamlit as st
 from yt_extractor import get_info
 import database_service as dbs
-# from py_workout_table import dates
-# from py_workout_table import data_boi
-import pandas as pd
-import matplotlib.pyplot as plt
+from analysis.py import Analysis_class
 
 @st.cache_data
 def get_workouts():
@@ -21,90 +18,6 @@ def get_duration_text(duration_s):
     else:
         text += f'{minutes:02d}:{seconds:02d}'
     return text
-
-def parse_reps(reps_str):
-    """Parse the reps string into a list of integers."""
-    # Removing brackets and splitting by comma
-    reps_str = reps_str.replace('[', '').replace(']', '')
-    reps_list = []
-    for rep in reps_str.split(","):
-        print(rep)
-        try:
-            reps_list.append(int(rep))
-        except:
-            continue
-    print(reps_list)
-    
-    return reps_list
-
-def parse_weights(weights_str):
-    """Parse the weights string into a list of integers."""
-    return [int(weight) for weight in weights_str.split(',') if weight]
-
-def analyze_workout(workouts, exercise_name):
-    """Extract and analyze workout data for the selected exercise."""
-    weight, reps, dates, table_w = [], [], [], []
-    
-    for workout_day in workouts:
-        for workout in workout_day:
-            if exercise_name.lower() in workout["Exercise Name"].lower():
-                table_w.append(workout)
-                weights = parse_weights(workout["Weight"])
-                reps_list = parse_reps(workout["Reps"])
-                
-                if len(weights) == len(reps_list):
-                    weight.extend(weights)
-                    reps.extend(reps_list)
-                    dates.extend([workout["Date"]] * len(weights))
-
-    return weight, reps, dates, table_w
-
-def display_analysis(weight, reps, dates, table_w):
-    """Display analysis results using Streamlit."""
-    st.markdown("## Analysis")
-    if not weight:
-        st.text("No data found for the selected exercise.")
-        return
-
-    st.text("Table of all entries with that exercise:")
-    st.table(table_w)
-    
-    # Data preparation for plotting
-    df = pd.DataFrame({
-        "Date": pd.to_datetime(dates, format='%m/%d/%y'),
-        "Weight": weight,
-        "Reps": reps
-    }).sort_values('Date')
-
-    # Plot weight over time
-    st.title('Weight Over Time')
-    plt.figure(figsize=(10, 5))
-    plt.plot(df['Date'], df['Weight'], marker='o')
-    plt.xlabel('Date')
-    plt.ylabel('Weight')
-    plt.title('Weight Tracking')
-    plt.grid(True)
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
-
-    # Bar chart for weights
-    st.bar_chart(df['Weight'])
-    
-    # Summary statistics
-    st.markdown("### Summary Statistics")
-    st.text(f"Max Weight: {df['Weight'].max()}")
-    st.text(f"Min Weight: {df['Weight'].min()}")
-    st.text(f"Average Weight: {df['Weight'].mean():.2f}")
-    
-    # Additional plot: Reps vs Weight
-    st.title('Reps vs Weight')
-    plt.figure(figsize=(10, 5))
-    plt.scatter(df['Reps'], df['Weight'], marker='o')
-    plt.xlabel('Reps')
-    plt.ylabel('Weight')
-    plt.title('Reps vs Weight')
-    plt.grid(True)
-    st.pyplot(plt)
 
 # Custom CSS
 st.markdown(
@@ -145,7 +58,8 @@ st.markdown(
 # title
 st.title("Workout APP")
 st.subheader("By Joseph Whelpley")
-st.text("This app connects to a harperdb database that contains 3 years of my workouts logged on my notes app, and a library of workout/motivation videos. Explore around and feel free to add your own entries")
+st.text("This app connects to a harperdb database that contains 3 years of my workouts")
+st.text("logged on my notes app, and a library of workout/motivation videos. Explore around and feel free to add your own entries")
 
 # menu options and sidebar 
 opts = ("Workouts Home", "Analysis", "Log a Workout","Today's workout video", "All workout videos", "Add workout video","About this app")
@@ -230,8 +144,9 @@ elif selection == "Analysis":
     sel_work = st.text_input("choose a workout to analyze")
     if sel_work:
         if st.button("Analyze"):
-            weight, reps, dates, table_w = analyze_workout(data_t["workouts"], sel_work)
-            display_analysis(weight, reps, dates, table_w)
+
+            weight, reps, dates, table_w = Analysis_class.analyze_workout(data_t["workouts"], sel_work)
+            Analysis_class.display_analysis(weight, reps, dates, table_w)
     
 elif selection == "Log a Workout":
     st.markdown("Log a Workout")
@@ -257,7 +172,7 @@ else:
     # select_d = st.selectbox("Choose a date",dates)
 
     # Reverse the table when button is clicked
-    if st.button("whatttt?"):  # Display the reversed table
-        st.text("bro you good?")
+    # if st.button("whatttt?"):  # Display the reversed table
+        #st.text("bro you good?")
 
 
