@@ -144,9 +144,10 @@ elif selection == "Analysis":
     sel_work = st.text_input("choose a workout to analyze")
     if sel_work:
         if st.button("Analyze"):
-
-            weight, reps, dates, table_w = Analysis_class.analyze_workout(data_t["workouts"], sel_work)
-            Analysis_class.display_analysis(weight, reps, dates, table_w)
+            ays = Analysis_class(data_t["workouts"])
+            
+            weight, reps, dates, table_w = ays.analyze_workout(data_t["workouts"], sel_work)
+            ays.display_analysis(weight, reps, dates, table_w)
     
 elif selection == "Log a Workout":
     st.markdown("Log a Workout")
