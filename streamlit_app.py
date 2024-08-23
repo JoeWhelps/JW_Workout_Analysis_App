@@ -167,15 +167,16 @@ elif selection == "Log a Workout":
             st.cache_data.clear()
 
 elif selection == "About this app":
-    st.text("this is an app")
+    st.markdown(f"## About this app")
+    st.text("For the past three years I have been logging my workouts in my notes app")
+    st.text("They were very disorganized and hard to interpret")
+    st.text("Then I had the idea to clean the data and see my overall trends from this valuable data")
+    st.text("With the help of chatgbt, I make sure each workout,weight, and rep is converted into a JSON")
+    st.text("Next, I uploaded my large JSON data onto HarperDB")
+    st.text("After connecting to the database, I built the streamlit app and deployed")
+    st.text("However, I am far from finished. I desire to keep finding new features and new functions for the new data")
 
 else:
     [ st.table(reversed(pep)) for pep in data_t["workouts"] ]
-    # st.table(data_t["workouts"][1])
-    # select_d = st.selectbox("Choose a date",dates)
-
-    # Reverse the table when button is clicked
-    # if st.button("whatttt?"):  # Display the reversed table
-        #st.text("bro you good?")
 
 
