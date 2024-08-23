@@ -58,8 +58,10 @@ st.markdown(
 # title
 st.title("Workout APP")
 st.subheader("By Joseph Whelpley")
-st.text("This app connects to a harperdb database that contains 3 years of my workouts")
-st.text("logged on my notes app, and a library of workout/motivation videos. Explore around and feel free to add your own entries")
+st.text("Welcome, this app has three main functions:")
+st.text("Workout Database")
+st.text("Workout Analyzer")
+st.text("Workout Youtube Video Library")
 
 # menu options and sidebar 
 opts = ("Workouts Home", "Analysis", "Log a Workout","Today's workout video", "All workout videos", "Add workout video","About this app")
@@ -145,7 +147,7 @@ elif selection == "Analysis":
     if sel_work:
         if st.button("Analyze"):
             ays = Analysis_class(data_t["workouts"])
-            
+
             weight, reps, dates, table_w = ays.analyze_workout(data_t["workouts"], sel_work)
             ays.display_analysis(weight, reps, dates, table_w)
     

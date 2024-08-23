@@ -54,13 +54,20 @@ class Analysis_class:
 
         st.text("Table of all entries with that exercise:")
         st.table(table_w)
-        st.text(reps)
+
         # Data preparation for plotting
         df = pd.DataFrame({
             "Date": pd.to_datetime(dates, format='%m/%d/%y'),
             "Weight": weight,
             "Reps": reps
         }).sort_values('Date')
+
+        # Summary statistics
+        st.markdown("### Summary Statistics")
+        st.text(f"Max Weight: {df['Weight'].max()}")
+        st.text(f"Min Weight: {df['Weight'].min()}")
+        st.text(f"Number of Workouts: {len(df['Weight'])}")
+        st.text(f"Average Weight: {df['Weight'].mean():.2f}")
 
         # Plot weight over time
         st.title('Weight Over Time')
@@ -73,16 +80,7 @@ class Analysis_class:
         plt.xticks(rotation=45)
         st.pyplot(plt)
 
-        # Bar chart for weights
-        st.bar_chart(df['Weight'])
-        
-        # Summary statistics
-        st.markdown("### Summary Statistics")
-        st.text(f"Max Weight: {df['Weight'].max()}")
-        st.text(f"Min Weight: {df['Weight'].min()}")
-        st.text(f"Average Weight: {df['Weight'].mean():.2f}")
-        
-        # Additional plot: Reps vs Weight
+        # Reps vs Weight
         st.title('Reps vs Weight')
         plt.figure(figsize=(10, 5))
         plt.scatter(df['Reps'], df['Weight'], marker='o')
@@ -91,4 +89,11 @@ class Analysis_class:
         plt.title('Reps vs Weight')
         plt.grid(True)
         st.pyplot(plt)
+
+        # Bar chart for weights
+        st.bar_chart(df['Weight'])
+        
+        
+        
+        
 
