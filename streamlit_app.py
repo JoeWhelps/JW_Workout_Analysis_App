@@ -143,7 +143,7 @@ elif selection == "Today's workout video":
 
 elif selection == "Analysis":
     st.markdown(f"## Analysis")
-    sel_work = st.text_input("choose a workout to analyze")
+    sel_work = st.text_input("Choose a workout to analyze (ex: 'bench')")
     if sel_work:
         if st.button("Analyze"):
             ays = Analysis_class(data_t["workouts"])
@@ -152,7 +152,8 @@ elif selection == "Analysis":
             ays.display_analysis(weight, reps, dates, table_w)
     
 elif selection == "Log a Workout":
-    st.markdown("Log a Workout")
+    st.markdown("## Log a Workout")
+    st.text("This feature is currently not available. Need to fix user permissions")
     log1 = st.text_input('New workout (cleaned)')
     if log1:
         if st.button("Add workout entry"):
@@ -177,6 +178,7 @@ elif selection == "About this app":
     st.text("However, I am far from finished. I desire to keep finding new features and new functions for the new data")
 
 else:
+    st.markdown("###All Workout Data")
     [ st.table(reversed(pep)) for pep in data_t["workouts"] ]
 
 
