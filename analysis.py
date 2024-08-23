@@ -47,7 +47,6 @@ class Analysis_class:
 
     def display_analysis(self,weight, reps, dates, table_w):
         """Display analysis results using Streamlit."""
-        st.markdown("## Analysis")
         if not weight:
             st.text("No data found for the selected exercise.")
             return
