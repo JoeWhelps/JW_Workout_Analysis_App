@@ -146,6 +146,7 @@ elif selection == "Analysis":
     sel_work = st.text_input("Choose a workout to analyze (ex: 'bench')")
     if sel_work:
         if st.button("Analyze"):
+            st.markdown(f'### "{sel_work}" Analysis')
             ays = Analysis_class(data_t["workouts"])
 
             weight, reps, dates, table_w = ays.analyze_workout(data_t["workouts"], sel_work)
