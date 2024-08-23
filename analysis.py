@@ -80,6 +80,10 @@ class Analysis_class:
         plt.xticks(rotation=45)
         st.pyplot(plt)
 
+        # Bar chart for weights
+        st.title("Weight over time (bar chart)")
+        st.bar_chart(df['Weight'])
+
         # Reps vs Weight
         st.title('Reps vs Weight')
         plt.figure(figsize=(10, 5))
@@ -90,8 +94,7 @@ class Analysis_class:
         plt.grid(True)
         st.pyplot(plt)
 
-        # Bar chart for weights
-        st.bar_chart(df['Weight'])
+        
         
         
         
