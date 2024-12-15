@@ -18,3 +18,6 @@ Thanks for visiting!
    ```
    $ streamlit run streamlit_app.py
    ```
+
+
+![image](https://github.com/user-attachments/assets/6e63e515-8ca6-4dfc-8a17-9d1f3507a3d1)
